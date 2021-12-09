@@ -1,0 +1,3 @@
+include ':crashkiller'
+include ':app'
+rootProject.name = "CrashKiller"
