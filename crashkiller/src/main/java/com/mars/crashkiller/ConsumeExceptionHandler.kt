@@ -13,16 +13,32 @@ internal class ConsumeExceptionHandler : Thread.UncaughtExceptionHandler {
 
     override fun uncaughtException(t: Thread?, e: Throwable?) {
         try {
-            if (!canConsumeInner(t, e)) {
-                mDefaultHandler?.uncaughtException(t, e)
-            } else if (t?.name == "main") {
-                // 保证主线程正常执行
-                while (true) {
-                    Looper.loop()
+            if (canConsumeInner(t, e)) {
+                // 只关心主线程
+                if (t != null && t.name.equals("main") && Looper.myLooper() == Looper.getMainLooper()) {
+                    while (true) {
+                        try {
+                            Looper.loop()
+                        } catch (ex: Exception) {
+                            if (!canConsumeInner(t, ex)) {
+                                invokeDefaultHandler(t, ex)
+                                break
+                            }
+                        }
+                    }
                 }
+            } else {
+                invokeDefaultHandler(t, e)
             }
-        } catch (ignore: Exception) {
-            mDefaultHandler?.uncaughtException(t, e)
+        } catch (throwable: Throwable) {
+            invokeDefaultHandler(t, throwable)
+        }
+    }
+
+    // 调用系统默认的异常处理器
+    private fun invokeDefaultHandler(thread: Thread?, throwable: Throwable?) {
+        if (mDefaultHandler != null && mDefaultHandler != this) {
+            mDefaultHandler!!.uncaughtException(thread, throwable)
         }
     }
 
