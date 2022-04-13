@@ -1,10 +1,12 @@
-package com.mars.crashkiller
+package com.mars.infra.protection
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.Toast
+import com.mars.infra.protection.lib.CrashKiller
+import com.mars.infra.protection.lib.UncaughtExceptionConsumer
 import java.lang.IllegalArgumentException
 import java.lang.NullPointerException
 

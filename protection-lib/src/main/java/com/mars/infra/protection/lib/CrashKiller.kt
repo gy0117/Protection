@@ -1,4 +1,4 @@
-package com.mars.crashkiller
+package com.mars.infra.protection.lib
 
 /**
  * Created by JohnnySwordMan on 2021/12/9

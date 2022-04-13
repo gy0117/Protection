@@ -1,4 +1,4 @@
-package com.mars.crashkiller
+package com.mars.infra.protection.lib
 
 import android.os.Looper
 
