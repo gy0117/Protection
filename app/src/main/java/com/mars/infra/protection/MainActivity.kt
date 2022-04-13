@@ -50,13 +50,6 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "主线程正常运行", Toast.LENGTH_SHORT).show()
             Log.e("CrashKiller", "主线程正常运行")
         }
-
-        CrashKiller.addConsumer(object : UncaughtExceptionConsumer {
-
-            override fun consume(t: Thread?, e: Throwable?): Boolean {
-                return e is NullPointerException
-            }
-        })
     }
 
     private fun invokeIllegalArgumentException() {

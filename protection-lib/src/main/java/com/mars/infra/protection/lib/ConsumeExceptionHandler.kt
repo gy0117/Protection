@@ -15,7 +15,7 @@ internal class ConsumeExceptionHandler : Thread.UncaughtExceptionHandler {
         try {
             if (canConsumeInner(t, e)) {
                 // 只关心主线程
-                if (t != null && t.name.equals("main") && Looper.myLooper() == Looper.getMainLooper()) {
+                if (Looper.myLooper() == Looper.getMainLooper()) {
                     while (true) {
                         try {
                             Looper.loop()
@@ -54,7 +54,7 @@ internal class ConsumeExceptionHandler : Thread.UncaughtExceptionHandler {
                     }
                 }
             }
-        } catch (e: Exception) {
+        } catch (ignore: Throwable) {
 
         }
         return false
@@ -76,6 +76,11 @@ internal class ConsumeExceptionHandler : Thread.UncaughtExceptionHandler {
     }
 
     @Synchronized
+    fun addConsumer(consumers: List<UncaughtExceptionConsumer>) {
+        consumerList.addAll(consumers)
+    }
+
+    @Synchronized
     fun removeConsumer(consumer: UncaughtExceptionConsumer) {
         consumerList.remove(consumer)
     }
@@ -84,10 +89,4 @@ internal class ConsumeExceptionHandler : Thread.UncaughtExceptionHandler {
     fun clear() {
         consumerList.clear()
     }
-}
-
-interface UncaughtExceptionConsumer {
-
-    @Throws(Throwable::class)
-    fun consume(t: Thread?, e: Throwable?): Boolean
 }
