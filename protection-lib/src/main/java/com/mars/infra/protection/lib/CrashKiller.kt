@@ -1,6 +1,7 @@
 package com.mars.infra.protection.lib
 
 import android.content.Context
+import com.mars.infra.protection.lib.internal.ToastBadTokenException
 
 /**
  * Created by JohnnySwordMan on 2021/12/9
@@ -32,7 +33,11 @@ object CrashKiller {
                 return true
             }
         }
-        crashConsumerList.add(aConsumerInner)
+        val toastBadTokenException = ToastBadTokenException()
+        crashConsumerList.apply {
+            add(aConsumerInner)
+            add(toastBadTokenException)
+        }
     }
 
 
